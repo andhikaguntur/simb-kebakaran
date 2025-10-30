@@ -15,26 +15,19 @@ $reports_query = "SELECT r.*, u.name as user_name FROM reports r
                   ORDER BY r.report_date DESC LIMIT 20";
 $reports_result = $conn->query($reports_query);
 
-// Hitung jumlah titik api dari GeoJSON
-$firepoints_count = 0;
-$high_confidence_count = 0;
-$geojson_file = 'data/firepoints.geojson';
+// 🔄 Ambil data dari API lokal (bukan dari file)
+$firepoints_query = "SELECT * FROM firepoints";
+$firepoints_result = $conn->query($firepoints_query);
 
-if (file_exists($geojson_file)) {
-    $geojson_content = file_get_contents($geojson_file);
-    $geojson_data = json_decode($geojson_content, true);
-    
-    if (isset($geojson_data['features'])) {
-        $firepoints_count = count($geojson_data['features']);
-        
-        // Hitung titik api dengan confidence tinggi (>= 80%)
-        foreach ($geojson_data['features'] as $feature) {
-            if (isset($feature['properties']['confidence']) && $feature['properties']['confidence'] >= 80) {
-                $high_confidence_count++;
-            }
-        }
+$firepoints_count = $firepoints_result->num_rows;
+$high_confidence_count = 0;
+
+while ($row = $firepoints_result->fetch_assoc()) {
+    if ((int)$row['confidence'] >= 80) {
+        $high_confidence_count++;
     }
 }
+
 
 // Hitung jumlah laporan dalam 24 jam terakhir
 $recent_reports_query = "SELECT COUNT(*) as count FROM reports WHERE report_date >= DATE_SUB(NOW(), INTERVAL 24 HOUR)";

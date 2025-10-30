@@ -8,6 +8,7 @@ if (session_status() === PHP_SESSION_NONE) {
 ?>
 <!DOCTYPE html>
 <html lang="id">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -17,6 +18,7 @@ if (session_status() === PHP_SESSION_NONE) {
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="styles.css">
 </head>
+
 <body>
     <!-- Header Fixed -->
     <header class="header-fixed">
@@ -39,23 +41,23 @@ if (session_status() === PHP_SESSION_NONE) {
                         <li class="nav-item">
                             <a class="nav-link" href="mitigasi.php"><i class="fas fa-shield-alt"></i> Mitigasi</a>
                         </li>
-                        <?php if(isset($_SESSION['user_role']) && $_SESSION['user_role'] === 'admin'): ?>
-                        <li class="nav-item">
-                            <a class="nav-link" href="admin.php"><i class="fas fa-user-shield"></i> Admin</a>
-                        </li>
+                        <?php if (isset($_SESSION['user_role'])): ?>
+                            <li class="nav-item">
+                                <a class="nav-link" href="admin.php"><i class="fas fa-user-shield"></i> Admin</a>
+                            </li>
                         <?php endif; ?>
                         <li class="nav-item">
                             <a class="nav-link" href="about.php"><i class="fas fa-info-circle"></i> About Me</a>
                         </li>
-                        <?php if(isset($_SESSION['user_id'])): ?>
-                        <li class="nav-item">
-                            <a class="nav-link" href="logout.php"><i class="fas fa-sign-out-alt"></i> Logout</a>
-                        </li>
+                        <?php if (isset($_SESSION['user_id'])): ?>
+                            <li class="nav-item">
+                                <a class="nav-link" href="logout.php"><i class="fas fa-sign-out-alt"></i> Logout</a>
+                            </li>
                         <?php endif; ?>
                     </ul>
                 </div>
             </div>
         </nav>
     </header>
-    
+
     <div class="content-wrapper">

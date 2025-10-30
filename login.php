@@ -25,12 +25,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $_SESSION['user_name'] = $user['name'];
                 $_SESSION['user_role'] = $user['role'];
 
-                // Log activity
-                $activity = "User login: " . $user['name'];
-                $log_stmt = $conn->prepare("INSERT INTO activity_logs (user_id, activity) VALUES (?, ?)");
-                $log_stmt->bind_param("is", $user['id'], $activity);
-                $log_stmt->execute();
-
                 header("Location: index.php");
                 exit;
             } else {

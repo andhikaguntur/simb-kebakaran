@@ -1,17 +1,66 @@
 <?php
+//get_firepoints_api.php
 header('Content-Type: application/json');
+include '../includes/db.php'; // koneksi mysqli
 
-$apiKey = "b3b3083320d2b01865ee9058bade2306";
-$url = "https://firms.modaps.eosdis.nasa.gov/api/area/csv/$apiKey/MODIS_NRT/[95,-11,141,6]/10";
+$cache_lifetime = 60 * 10; // cache 10 menit
 
-// Ambil data CSV dari NASA FIRMS
-$data = @file_get_contents($url);
-if (!$data) {
-    echo json_encode(["type" => "FeatureCollection", "features" => [], "error" => "Gagal mengambil data dari FIRMS"]);
+// Cek kapan terakhir kali data diperbarui
+$last_update = $conn->query("SELECT MAX(created_at) AS last_update FROM firepoints")->fetch_assoc()['last_update'];
+$is_cache_valid = $last_update && (time() - strtotime($last_update) < $cache_lifetime);
+
+if ($is_cache_valid) {
+    // 💾 Data cache masih valid → ambil dari database
+    $result = $conn->query("SELECT * FROM firepoints");
+    $features = [];
+    while ($row = $result->fetch_assoc()) {
+        $features[] = [
+            "type" => "Feature",
+            "geometry" => [
+                "type" => "Point",
+                "coordinates" => [(float)$row['longitude'], (float)$row['latitude']]
+            ],
+            "properties" => [
+                "location" => $row['location'],
+                "acq_date" => $row['acq_date'],
+                "acq_time" => $row['acq_time'],
+                "confidence" => (int)$row['confidence'],
+                "brightness" => (float)$row['brightness'],
+                "satellite" => $row['satellite'],
+                "frp" => (float)$row['frp']
+            ]
+        ];
+    }
+
+    echo json_encode([
+        "source" => "cache",
+        "type" => "FeatureCollection",
+        "features" => $features
+    ], JSON_PRETTY_PRINT);
     exit;
 }
 
-// Parse CSV
+// 🛰 Kalau cache sudah expired → ambil ulang dari API
+$apiKey = "b3b3083320d2b01865ee9058bade2306";
+$url = "https://firms.modaps.eosdis.nasa.gov/api/area/csv/$apiKey/MODIS_NRT/[95,-11,141,6]/10";
+
+$data = @file_get_contents($url);
+if (!$data) {
+    // kalau gagal ambil dari API, fallback ke cache lama
+    $result = $conn->query("SELECT * FROM firepoints");
+    $features = [];
+    while ($row = $result->fetch_assoc()) {
+        $features[] = [
+            "type" => "Feature",
+            "geometry" => ["type" => "Point", "coordinates" => [(float)$row['longitude'], (float)$row['latitude']]],
+            "properties" => $row
+        ];
+    }
+    echo json_encode(["source" => "old_cache", "features" => $features]);
+    exit;
+}
+
+// Parse CSV dari NASA
 $rows = array_map("str_getcsv", explode("\n", trim($data)));
 $header = array_shift($rows);
 $features_raw = [];
@@ -19,76 +68,73 @@ $features_raw = [];
 foreach ($rows as $row) {
     if (count($row) !== count($header)) continue;
     $rec = array_combine($header, $row);
-
     $lat = floatval($rec['latitude'] ?? 0);
     $lon = floatval($rec['longitude'] ?? 0);
-    $confidence = intval($rec['confidence'] ?? 0);
+    $conf = intval($rec['confidence'] ?? 0);
 
-    // Filter hanya wilayah Indonesia (bounding box)
     if ($lon < 95 || $lon > 141 || $lat < -11 || $lat > 6) continue;
-
-    // Filter hanya confidence >= 50
-    if ($confidence < 50) continue;
+    if ($conf < 50) continue;
 
     $features_raw[] = [
         'latitude' => $lat,
         'longitude' => $lon,
         'acq_date' => $rec['acq_date'] ?? '',
         'acq_time' => $rec['acq_time'] ?? '',
-        'confidence' => $confidence,
+        'confidence' => $conf,
         'brightness' => $rec['brightness'] ?? null,
         'satellite' => $rec['satellite'] ?? null,
-        'frp' => $rec['frp'] ?? null
+        'frp' => $rec['frp'] ?? null,
+        'location' => getSimpleLocation($lat, $lon)
     ];
 }
 
-// Hapus duplikat berdasarkan koordinat & tanggal
-$seen = [];
-$features = [];
-foreach ($features_raw as $r) {
-    $key = round($r['latitude'], 4) . '_' . round($r['longitude'], 4) . '_' . $r['acq_date'];
-    if (isset($seen[$key])) continue;
-    $seen[$key] = true;
+// Simpan hasil baru ke DB
+$conn->query("TRUNCATE TABLE firepoints");
+$stmt = $conn->prepare("
+    INSERT INTO firepoints (latitude, longitude, acq_date, acq_time, confidence, brightness, satellite, frp, location)
+    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
+");
 
+foreach ($features_raw as $f) {
+
+    $location = getSimpleLocation($f['latitude'], $f['longitude']);
+
+    $stmt->bind_param(
+        "ddssidsds",
+        $f['latitude'],
+        $f['longitude'],
+        $f['acq_date'],
+        $f['acq_time'],
+        $f['confidence'],
+        $f['brightness'],
+        $f['satellite'],
+        $f['frp'],
+        $location
+    );
+
+    $stmt->execute();
+}
+
+
+// Ambil hasil baru untuk dikirim ke frontend
+$result = $conn->query("SELECT * FROM firepoints");
+$features = [];
+while ($row = $result->fetch_assoc()) {
     $features[] = [
         "type" => "Feature",
-        "geometry" => [
-            "type" => "Point",
-            "coordinates" => [$r['longitude'], $r['latitude']]
-        ],
-        "properties" => [
-            "location" => getSimpleLocation($r['latitude'], $r['longitude']),
-            "acq_date" => $r['acq_date'],
-            "acq_time" => $r['acq_time'],
-            "confidence" => $r['confidence'],
-            "brightness" => $r['brightness'],
-            "satellite" => $r['satellite'],
-            "frp" => $r['frp']
-        ]
+        "geometry" => ["type" => "Point", "coordinates" => [(float)$row['longitude'], (float)$row['latitude']]],
+        "properties" => $row
     ];
 }
 
-// Batasi jumlah titik (opsional)
-$MAX = 2000;
-if (count($features) > $MAX) {
-    $step = ceil(count($features) / $MAX);
-    $sampled = [];
-    for ($i = 0; $i < count($features); $i += $step) {
-        $sampled[] = $features[$i];
-    }
-    $features = $sampled;
-}
-
-// Output GeoJSON
 echo json_encode([
+    "source" => "api_refresh",
     "type" => "FeatureCollection",
-    "features" => array_values($features)
+    "features" => $features
 ], JSON_PRETTY_PRINT);
 
-// =====================================================
-// Fungsi sederhana untuk nama lokasi (versi kamu bisa lebih lengkap)
-// =====================================================
-function getSimpleLocation($lat, $lon) {
+function getSimpleLocation($lat, $lon)
+{
     if ($lat >= 2 && $lat <= 6 && $lon >= 95 && $lon <= 98) return 'Aceh';
     if ($lat >= 1 && $lat <= 4 && $lon >= 98 && $lon <= 100) return 'Sumatera Utara';
     if ($lat >= -3 && $lat <= 1 && $lon >= 98 && $lon <= 102) return 'Sumatera Barat';
@@ -105,4 +151,3 @@ function getSimpleLocation($lat, $lon) {
     if ($lat >= -9 && $lat <= 0 && $lon >= 135 && $lon <= 141) return 'Papua';
     return 'Indonesia';
 }
-?>
