@@ -17,6 +17,7 @@ if (session_status() === PHP_SESSION_NONE) {
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="styles.css">
+    <script src="script.js"></script>
 </head>
 
 <body>
@@ -47,7 +48,7 @@ if (session_status() === PHP_SESSION_NONE) {
                             </li>
                         <?php endif; ?>
                         <li class="nav-item">
-                            <a class="nav-link" href="about.php"><i class="fas fa-info-circle"></i> About Me</a>
+                            <a class="nav-link" href="about.php"><i class="fas fa-info-circle"></i> About Us</a>
                         </li>
                         <?php if (isset($_SESSION['user_id'])): ?>
                             <li class="nav-item">

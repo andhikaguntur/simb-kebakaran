@@ -19,8 +19,11 @@ body {
     color: var(--text-dark);
     background-color: var(--light-bg);
     line-height: 1.6;
+    
 }
-
+html, body, * {
+  cursor: url('asset/jerigen.png') 16 16, auto !important;
+}
 /* Header Fixed */
 .header-fixed {
     position: fixed;
@@ -115,7 +118,8 @@ body {
 .btn-hero:hover {
     transform: scale(1.05);
     box-shadow: 0 10px 30px rgba(0,0,0,0.3);
-    color: var(--fire-orange);
+    color: white;
+    
 }
 
 /* Animations */
@@ -156,6 +160,73 @@ body {
 .info-card:hover {
     transform: translateY(-10px);
     box-shadow: 0 15px 40px rgba(0,0,0,0.2);
+      box-shadow: 0 0 25px rgba(255, 69, 0, 0.4);
+}
+
+/* 🔥 Efek api di TEPI SAJA */
+.info-card::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: 12px;
+  padding: 5px; /* ketebalan api */
+  background: linear-gradient(
+    60deg,
+    rgba(255, 69, 0, 1),
+    rgba(255, 140, 0, 1),
+    rgba(255, 215, 0, 1),
+    rgba(255, 69, 0, 1)
+  );
+  background-size: 300% 300%;
+  animation: fireFlow 3s linear infinite;
+  /* trik: bagian tengah di-mask agar isi card tidak berubah */
+  -webkit-mask:
+    linear-gradient(#fff 0 0) content-box,
+    linear-gradient(#fff 0 0);
+  -webkit-mask-composite: destination-out;
+  mask:
+    linear-gradient(#fff 0 0) content-box,
+    linear-gradient(#fff 0 0);
+  mask-composite: exclude;
+  opacity: 0;
+  transition: opacity 0.4s ease;
+}
+
+/* aktifkan efek saat hover */
+.info-card:hover::before {
+  opacity: 1;
+}
+
+/* 🔥 animasi nyala api */
+@keyframes fireFlow {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+/* ikon dan teks tetap normal */
+.card-icon {
+  font-size: 50px;
+  color: #ff4500;
+  margin-bottom: 15px;
+}
+.info-card h3 {
+  font-weight: 600;
+  margin-bottom: 10px;
+}
+.read-more {
+  color: #ff4500;
+  font-weight: 500;
+  transition: color 0.3s ease;
+}
+.info-card:hover .read-more {
+  color: #ff8c00;
 }
 
 .card-icon {
@@ -197,6 +268,10 @@ body {
 .modal-title {
     font-weight: bold;
 }
+
+
+
+
 
 /* Page Title */
 .page-title {
@@ -598,4 +673,99 @@ border: 3px solid rgba(255,255,255,0.3);
 border-radius: 50%;
 border-top-color: white;
 animation: spin 1s ease-in-out infinite;
+}
+
+
+/* === Carousel Button Styling (perbaikan fokus tombol) === */
+.carousel-control-prev,
+.carousel-control-next {
+    width: 15%; /* sedikit lebih lebar untuk area klik nyaman */
+    opacity: 0.7; /* transparansi awal */
+    transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+.carousel-control-prev:hover,
+.carousel-control-next:hover {
+    opacity: 1; /* tampil penuh saat dihover */
+    transform: scale(1.05); /* efek klik halus */
+}
+
+/* Ubah ikon panah agar lebih kecil dan modern */
+.carousel-control-prev-icon,
+.carousel-control-next-icon {
+    background-color: rgba(0,0,0,0.4); /* latar belakang semi-transparan */
+    border-radius: 50%;
+    padding: 10px;
+    width: 32px;
+    height: 32px;
+    background-size: 60% 60%; /* kecilkan ikon panah sedikit */
+    filter: invert(1); /* ubah jadi putih agar kontras */
+}
+
+/* Efek hover ikon */
+.carousel-control-prev-icon:hover,
+.carousel-control-next-icon:hover {
+    background-color: rgba(0,0,0,0.6);
+}
+
+/* === Card Terima Kasih (pengisi tinggi kiri) === */
+.thanks-card {
+    background: linear-gradient(135deg, var(--fire-red), var(--fire-orange));
+    border-radius: 12px;
+    padding: 20px;
+    color: #fff;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    margin-top: -7px;
+}
+
+.thanks-card h4 {
+    font-weight: 600;
+    
+}
+
+.thanks-card p {
+    font-size: 0.95rem;
+  
+}
+.flame-trail {
+  position: absolute;
+  width: 18px;
+  height: 24px;
+  pointer-events: none;
+  background: radial-gradient(
+    circle at 50% 50%,
+    rgba(255, 230, 120, 0.95) 0%,
+    rgba(255, 160, 0, 0.8) 40%,
+    rgba(255, 60, 0, 0.5) 70%,
+    rgba(255, 0, 0, 0) 100%
+  );
+  filter: blur(1.5px) brightness(1.3);
+  mix-blend-mode: screen;
+  border-radius: 40% 60% 55% 45%;
+  opacity: 0.9;
+  transform: rotate(var(--rotate)) scale(1);
+  animation: flameQuick 0.6s ease-out forwards;
+  z-index: 9999;
+}
+
+@keyframes flameQuick {
+  0% {
+    transform: translate(0, 0) scale(1) rotate(var(--rotate));
+    opacity: 0.9;
+    filter: blur(1px) brightness(1.3);
+  }
+  50% {
+    transform: translate(var(--xMove), var(--yMove)) scale(1.8);
+    opacity: 0.6;
+    filter: blur(2px) brightness(1.6);
+  }
+  100% {
+    transform: translate(calc(var(--xMove) * 1.2), calc(var(--yMove) * 1.3)) scale(2.5);
+    opacity: 0;
+    filter: blur(4px) brightness(1);
+  }
 }

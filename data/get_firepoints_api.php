@@ -95,8 +95,11 @@ $stmt = $conn->prepare("
     VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
 ");
 
-foreach ($features_raw as $f) {
+$limit = 100;
+$count = 0;
 
+foreach ($features_raw as $f) {
+    if ($count >= $limit) break;
     $location = getSimpleLocation($f['latitude'], $f['longitude']);
 
     $stmt->bind_param(
@@ -111,8 +114,8 @@ foreach ($features_raw as $f) {
         $f['frp'],
         $location
     );
-
     $stmt->execute();
+    $count++;
 }
 
 
