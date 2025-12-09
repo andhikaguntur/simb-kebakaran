@@ -6,7 +6,7 @@
             <div class="row">
                 <div class="col-md-4">
                     <h5><i class="fas fa-fire-alt"></i> SIMB Kebakaran</h5>
-                    <p>Sistem Informasi Manajemen Bahaya Kebakaran Hutan & Lahan</p>
+                    <p>Sistem Informasi Manajemen Bencana Kebakaran Hutan & Lahan</p>
                 </div>
                 <div class="col-md-4">
                     <h5><i class="fas fa-link"></i> Link Penting</h5>
@@ -27,7 +27,7 @@
             </div>
             <hr>
             <div class="text-center">
-                <p>&copy; 2024 SIMB Kebakaran. Tugas Kuliah - Sistem Informasi.</p>
+                <p>&copy; 2025 SIMB Kebakaran.</p>
             </div>
         </div>
     </footer>

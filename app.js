@@ -1,5 +1,4 @@
 // app.js
-// JavaScript untuk interaksi peta dan UI (versi real-time NASA FIRMS)
 
 document.addEventListener('DOMContentLoaded', function() {
     if (document.getElementById('map')) {
@@ -30,66 +29,33 @@ function initMap() {
     // Ambil data dari backend (NASA FIRMS API -> PHP)
     fetch('data/get_firepoints_api.php')
         .then(response => {
-            if (!response.ok) throw new Error("Gagal memuat data dari server");
+            if (!response.ok) throw new Error('Network response was not ok');
             return response.json();
         })
         .then(data => {
-            console.log("Data diterima:", data);
-
-            if (!data.features || data.features.length === 0) {
-                console.warn('Tidak ada data titik api ditemukan.');
-                document.getElementById('fireTableBody').innerHTML =
-                    '<tr><td colspan="7" class="text-center">Tidak ada data titik api</td></tr>';
+            if (!data || !data.features) {
+                populateFireTable([]);
                 return;
             }
 
-            // Tambahkan marker ke peta
-            L.geoJSON(data, {
-                pointToLayer: function(feature, latlng) {
-                    return L.marker(latlng, { icon: fireIcon });
-                },
-                onEachFeature: function(feature, layer) {
-                    const props = feature.properties;
-                    const popupContent = `
-                        <div style="min-width: 200px;">
-                            <h6 style="color: #ff4444; margin-bottom: 10px;">
-                                <i class="fas fa-fire"></i> Titik Api
-                            </h6>
-                            <table style="width: 100%; font-size: 0.9em;">
-                                <tr>
-                                    <td><strong>Wilayah:</strong></td>
-                                    <td>${props.location || 'Tidak diketahui'}</td>
-                                </tr>
-                                <tr>
-                                    <td><strong>Tanggal:</strong></td>
-                                    <td>${props.acq_date || 'N/A'}</td>
-                                </tr>
-                                <tr>
-                                    <td><strong>Confidence:</strong></td>
-                                    <td>${props.confidence || 'N/A'}%</td>
-                                </tr>
-                                <tr>
-                                    <td><strong>Satelit:</strong></td>
-                                    <td>${props.satellite || 'N/A'}</td>
-                                </tr>
-                                <tr>
-                                    <td><strong>FRP:</strong></td>
-                                    <td>${props.frp || 'N/A'} MW</td>
-                                </tr>
-                            </table>
-                        </div>
-                    `;
-                    layer.bindPopup(popupContent);
-                }
-            }).addTo(map);
+            const features = data.features.slice(); // copy
+            features.sort((a, b) => {
+                const aKey = (a.properties.acq_date || '') + (a.properties.acq_time || '');
+                const bKey = (b.properties.acq_date || '') + (b.properties.acq_time || '');
+                return bKey.localeCompare(aKey);
+            });
 
-            // Tampilkan tabel
-            populateFireTable(data.features);
+            features.forEach(f => {
+                const c = f.geometry.coordinates;
+                L.marker([c[1], c[0]], { icon: fireIcon }).addTo(map)
+                    .bindPopup(`<strong>${f.properties.location}</strong><br>${f.properties.acq_date} ${f.properties.acq_time || ''}<br>Conf: ${f.properties.confidence}%`);
+            });
+
+            populateFireTable(features);
         })
         .catch(error => {
-            console.error('Error memuat data titik api:', error);
-            document.getElementById('fireTableBody').innerHTML =
-                '<tr><td colspan="7" class="text-center text-danger">Gagal memuat data titik api</td></tr>';
+            console.error('Fetch error:', error);
+            populateFireTable([]);
         });
 }
 

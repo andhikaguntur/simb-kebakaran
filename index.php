@@ -1,6 +1,4 @@
 <?php
-// index.php
-// Halaman Utama dengan 3 Cuplikan
 
 session_start();
 include 'includes/header.php';
@@ -10,7 +8,7 @@ include 'includes/header.php';
 <section class="hero-section">
     <div class="hero-overlay"></div>
     <div class="container hero-content">
-        <h1 class="hero-title animate-fade-in">Sistem Informasi Manajemen Bahaya Kebakaran</h1>
+        <h1 class="hero-title animate-fade-in">Sistem Informasi Manajemen Bencana </Br> Kebakaran Hutan dan Lahan</h1>
         <p class="hero-subtitle animate-fade-in-delay">Memantau, Menganalisis, dan Mitigasi Kebakaran Hutan & Lahan</p>
         <a href="data.php" class="btn btn-hero animate-fade-in-delay-2">
             <i class="fas fa-map-marked-alt"></i> Lihat Peta Titik Api

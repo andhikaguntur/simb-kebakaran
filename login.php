@@ -65,12 +65,10 @@ include 'includes/header.php';
                         </button>
 
                         <div class="text-center">
-                            <p>Belum punya akun? <a href="register.php">Daftar di sini</a></p>
                             <hr>
                             <small class="text-muted">
                                 Demo Account:<br>
                                 Admin: admin@simb.com / admin123<br>
-                                User: user@simb.com / user123
                             </small>
                         </div>
                     </form>

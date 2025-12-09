@@ -4,7 +4,7 @@ session_start();
 include 'includes/db.php';
 
 // Ambil data firepoints
-$firepoints_query = "SELECT * FROM firepoints";
+$firepoints_query = "SELECT * FROM firepoints ORDER BY acq_date DESC, acq_time DESC" ;
 $firepoints_result = $conn->query($firepoints_query);
 
 $firepoints_count = $firepoints_result->num_rows;
@@ -95,12 +95,12 @@ include 'includes/header.php';
             <div class="card-body">
                 <h6 class="card-title"><i class="fas fa-file-code text-primary me-2"></i>File Data Lokal</h6>
                 <p class="mb-3">
-                    <code>data/firepoints.geojson</code>
+                    <code>firepoints.geojson</code>
                     <span class="badge bg-success ms-2">
                         <i class="fas fa-check"></i> <?php echo $firepoints_count; ?> titik api
                     </span>
                 </p>
-                <a href="data/firepoints.geojson" class="btn btn-primary btn-sm" download>
+                <a href="download_geojson.php" class="btn btn-primary btn-sm" download>
                     <i class="fas fa-download"></i> Download GeoJSON
                 </a>
             </div>

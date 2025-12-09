@@ -1,6 +1,4 @@
 <?php
-// mitigasi.php
-// Halaman Mitigasi Lengkap
 
 session_start();
 include 'includes/header.php';

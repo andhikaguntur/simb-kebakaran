@@ -10,7 +10,7 @@ $last_update = $conn->query("SELECT MAX(created_at) AS last_update FROM firepoin
 $is_cache_valid = $last_update && (time() - strtotime($last_update) < $cache_lifetime);
 
 if ($is_cache_valid) {
-    // 💾 Data cache masih valid → ambil dari database
+    //  Data cache masih valid → ambil dari database
     $result = $conn->query("SELECT * FROM firepoints");
     $features = [];
     while ($row = $result->fetch_assoc()) {
@@ -95,7 +95,7 @@ $stmt = $conn->prepare("
     VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
 ");
 
-$limit = 100;
+$limit = 50;
 $count = 0;
 
 foreach ($features_raw as $f) {

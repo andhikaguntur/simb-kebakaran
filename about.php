@@ -16,10 +16,10 @@ include 'includes/header.php';
                 <!-- PROFIL ATAS (statis) -->
                 <div class="profile-card text-center">
                     <div class="profile-image">
-    <img src="asset/guntur.png" alt="Foto Profil Utama" class="img-fluid rounded-circle" style="width:170px; object-fit:cover;">
+    <img src="asset/dito.png" alt="Foto Profil Utama" class="img-fluid rounded-circle" style="width:170px; object-fit:cover;">
 </div>
-                    <h3>Guntur(ketua)</h3>
-                    <p class="text-muted">Web Developer</p>
+                    <h3>Sultannang Nandito S. (Ketua)</h3>
+                    <p class="text-muted">UI/UX Designer</p>
                     <div class="social-links">
                         <a href="https://wa.me/6281281108030" title="Email"><i class="fas fa-envelope"></i></a>
                         <a href="#" title="GitHub"><i class="fab fa-github"></i></a>
@@ -37,8 +37,8 @@ include 'includes/header.php';
                                 <div class="profile-image">
     <img src="asset/guntur.png" alt="Foto Profil Utama" class="img-fluid rounded-circle" style="width:170px; object-fit:cover;">
 </div>
-                                <h3>budak 1</h3>
-                                <p class="text-muted">Front-End Developer</p>
+                                <h3>Andhika Guntur R.</h3>
+                                <p class="text-muted">Backend Developer</p>
                                 <div class="social-links">
                                     <a href="#"><i class="fas fa-envelope"></i></a>
                                     <a href="#"><i class="fab fa-github"></i></a>
@@ -51,10 +51,10 @@ include 'includes/header.php';
                         <div class="carousel-item">
                             <div class="profile-card text-center">
                                <div class="profile-image">
-    <img src="asset/guntur.png" alt="Foto Profil Utama" class="img-fluid rounded-circle" style="width:170px; object-fit:cover;">
+    <img src="asset/neza.png" alt="Foto Profil Utama" class="img-fluid rounded-circle" style="width:170px; object-fit:cover;">
 </div>
-                                <h3>budak 2</h3>
-                                <p class="text-muted">Back-End Developer</p>
+                                <h3>Kayla Zachfatuneza</h3>
+                                <p class="text-muted">Frontend Developer</p>
                                 <div class="social-links">
                                     <a href="#"><i class="fas fa-envelope"></i></a>
                                     <a href="#"><i class="fab fa-github"></i></a>
@@ -67,10 +67,10 @@ include 'includes/header.php';
                         <div class="carousel-item">
                             <div class="profile-card text-center">
                               <div class="profile-image">
-    <img src="asset/guntur.png" alt="Foto Profil Utama" class="img-fluid rounded-circle" style="width:170px; object-fit:cover;">
+    <img src="asset/rafid.png" alt="Foto Profil Utama" class="img-fluid rounded-circle" style="width:170px; object-fit:cover;">
 </div>
-                                <h3>budak 3</h3>
-                                <p class="text-muted">UI/UX Designer</p>
+                                <h3>Rafid Ihsan N.</h3>
+                                <p class="text-muted">Frontend Developer</p>
                                 <div class="social-links">
                                     <a href="#"><i class="fas fa-envelope"></i></a>
                                     <a href="#"><i class="fab fa-github"></i></a>
@@ -83,10 +83,10 @@ include 'includes/header.php';
                         <div class="carousel-item">
                             <div class="profile-card text-center">
                               <div class="profile-image">
-    <img src="asset/guntur.png" alt="Foto Profil Utama" class="img-fluid rounded-circle" style="width:170px; object-fit:cover;">
+    <img src="asset/ilham.png" alt="Foto Profil Utama" class="img-fluid rounded-circle" style="width:170px; object-fit:cover;">
 </div>
-                                <h3>budak 4</h3>
-                                <p class="text-muted">Data Analyst</p>
+                                <h3>M. Ilham Kurniawan</h3>
+                                <p class="text-muted">UI/UX Designer</p>
                                 <div class="social-links">
                                     <a href="#"><i class="fas fa-envelope"></i></a>
                                     <a href="#"><i class="fab fa-github"></i></a>
@@ -107,7 +107,7 @@ include 'includes/header.php';
                         <span class="visually-hidden">Next</span>
                     </button>
                 </div>
-                <!-- CARD TERIMA KASIH -->
+                <!-- CARD TERIMA KASIH YUHUU -->
 <div class="thanks-card text-center">
     <h4>Thank You.</h4>
 
@@ -121,7 +121,7 @@ include 'includes/header.php';
         <div class="col-md-8">
             <div class="about-content">
                 <h4><i class="fas fa-project-diagram"></i> Tentang Proyek</h4>
-                <p>SIMB (Sistem Informasi Manajemen Bahaya) Kebakaran adalah aplikasi web yang dikembangkan untuk membantu dalam pemantauan, analisis, dan mitigasi kebakaran hutan dan lahan di Indonesia.</p>
+                <p>SIMB (Sistem Informasi Manajemen Bencana) Kebakaran adalah aplikasi web yang dikembangkan untuk membantu dalam pemantauan, analisis, dan mitigasi kebakaran hutan dan lahan di Indonesia.</p>
                 
                 <h4 class="mt-4"><i class="fas fa-bullseye"></i> Tujuan</h4>
                 <ul>
@@ -147,23 +147,20 @@ include 'includes/header.php';
                     <li><strong>NASA FIRMS:</strong> Fire Information for Resource Management System
                         <br><small class="text-muted">https://firms.modaps.eosdis.nasa.gov/</small>
                     </li>
-                    <li><strong>OpenStreetMap:</strong> Peta dasar open-source
-                        <br><small class="text-muted">https://www.openstreetmap.org/</small>
-                    </li>
                 </ul>
 
                 <h4 class="mt-4"><i class="fas fa-graduation-cap"></i> Informasi Akademis</h4>
                 <p>
                     <strong>Mata Kuliah:</strong> Sistem Informasi Manajemen Bencana<br>
-                    <strong>Dosen:</strong> Herry Sofyan<br>
+                    <strong>Dosen Pengampu:</strong> Herry Sofyan, S.T., M.Kom.<br>
                     <strong>Universitas:</strong> Universitas Pembangunan Nasional "Veteran" Yogyakarta<br>
                     <strong>Tahun:</strong> 2025/2026
                 </p>
 
                 <h4 class="mt-4"><i class="fas fa-envelope"></i> Kontak</h4>
                 <p>
-                    Email: <a href="mailto:email@example.com">email@example.com</a><br>
-                    GitHub: <a href="https://github.com/username" target="_blank">github.com/username</a>
+                    Email: <a href="mailto:andhikaguntur77.ag@gmail.com">andhikaguntur77.ag@gmail.com</a><br>
+                    GitHub: <a href="https://github.com/andhikaguntur" target="_blank">github.com/andhikaguntur</a>
                 </p>
             </div>
         </div>
